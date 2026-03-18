@@ -1,0 +1,331 @@
+# Turn Your Datacenter into an AI Factory
+
+Production LLM inference on your infrastructure — OpenAI-compatible APIs, optimized hardware, full data sovereignty.
+
+[Book a Demo](https://calendly.com/d/cygt-b4b-5qp/cloudrift-demo-datacenter-partners) [Contact Us](https://www.cloudrift.ai/inference-for-datacenters#contact)
+
+The Challenge
+
+## From GPU Capacity to AI Revenue
+
+Many datacenters have GPU capacity and growing demand. What's missing is a reliable way to turn that capacity into a sellable service with predictable performance and economics.
+
+Revenue Gap
+
+GPU capacity alone does not translate into revenue. Without the right serving stack and pricing model, utilization stays uneven and margins remain unclear.
+
+Operational Complexity
+
+Production workloads require low latency, high concurrency, and predictable behavior. Ad-hoc deployments and generic stacks struggle under real production traffic.
+
+Loss of Control
+
+Many providers sell access to their own infrastructure. Datacenters lose control over pricing, branding, and customer relationships.
+
+### CloudRift helps datacenter operators close this gap
+
+By combining production software, benchmark-driven hardware guidance, and operational experience from running real datacenters at scale.
+
+[Get Started](https://www.cloudrift.ai/inference-for-datacenters#contact)
+
+The Platform
+
+## Run Enterprise LLMs on Your Own GPUs
+
+CloudRift enables organizations to offer production-grade LLM-as-a-service, running on their own hardware and delivered through enterprise-ready APIs.
+
+### Production LLM-as-a-Service
+
+OpenAI-compatible APIs, streaming support, and usage-based billing — designed for real production workloads.
+
+PythonTypeScriptcURL
+
+```
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_RIFT_API_KEY",
+    base_url="https://inference.cloudrift.ai/v1"
+)
+
+completion = client.chat.completions.create(
+    model="qwen/qwen3.5-35b-a3b",
+    messages=[\
+        {"role": "user", "content": "Hello"}\
+    ],
+    stream=True
+)
+
+for chunk in completion:
+    print(chunk.choices[0].delta.content or "", end="")
+```
+
+### Data-Driven Hardware Decisions
+
+Real-world benchmarks and performance data guide GPU selection, configuration, and deployment strategy for your workloads.
+
+### Built by Experts
+
+Designed and operated by teams with deep experience in model optimization, datacenter operations, and production inference at scale.
+
+Process
+
+## How It Works
+
+Step 1
+
+Benchmark & Plan
+
+Benchmark workloads across GPUs and configurations to define performance targets and hardware requirements.
+
+Step 2
+
+Deploy & Configure
+
+Deploy a production stack optimized for throughput, latency, and concurrency with pre-built templates.
+
+Step 3
+
+Monitor & Optimize
+
+Track performance metrics and fine-tune your infrastructure in real time.
+
+Step 4
+
+Scale on Demand
+
+Deliver via OpenAI-compatible APIs with streaming and usage-based billing that scales with your workload.
+
+Step 5
+
+Collaborate & Share
+
+Connect with trusted build partners for hardware procurement, financing, and benchmark-driven specifications.
+
+Step 6
+
+Iterate & Improve
+
+Monitor performance, adjust configurations, and optimize cost and utilization over time.
+
+Data-Driven
+
+## Benchmark-Driven Hardware Guidance
+
+Inference performance depends heavily on hardware choice and configuration. CloudRift runs regular benchmarks across GPUs, models, and serving setups to understand real-world tradeoffs.
+
+Why Our Benchmarks Matter
+
+Synthetic specs do not reflect real production behavior. We measure complete serving paths under realistic load.
+
+What We Benchmark
+
+Models, GPU generations, throughput, latency, concurrency, cost efficiency, context lengths, parallelization parameters, and inference frameworks.
+
+How Operators Use This Data
+
+Operators use this data to choose hardware, tune deployments, and define pricing models for their inference services.
+
+[View Benchmarks](https://www.cloudrift.ai/blog) [Contact Us](https://www.cloudrift.ai/inference-for-datacenters#contact)
+
+![Benchmark throughput comparison across 8x RTX Pro 6000, 8x H100, and 8x H200](https://www.cloudrift.ai/_next/image?url=%2Fbenchmark-qwen3-throughput.webp&w=1920&q=75)
+
+Real-world benchmark: Qwen3-Coder-480B-A35B-Instruct-AWQ tested on 8x RTX Pro 6000, 8x H100, and 8x H200 GPU configurations
+
+Hardware
+
+## Inference Accelerators and Hardware Optimization
+
+Some workloads require more than standard GPU configurations. CloudRift supports deeper hardware and system-level optimizations for demanding use cases.
+
+![Pliops inference accelerator card](https://www.cloudrift.ai/_next/image?url=%2Fpliops-accelerator.webp&w=828&q=75)
+
+### Accelerator Options
+
+For select deployments, we support specialized accelerators designed to improve throughput and reduce latency by optimizing memory access and model serving paths.
+
+- Faster KV cache access
+- Reduced memory bottlenecks
+- Better performance under high concurrency
+
+![GPU server rack showing datacenter infrastructure](https://www.cloudrift.ai/_next/image?url=%2Fgpu-server-rack-clean.webp&w=1920&q=75)
+
+### System and Rack-Level Optimization
+
+Beyond individual components, CloudRift helps operators optimize their systems, including GPU density, storage layout, and network configuration.
+
+- Hardware-aware serving configurations
+- Balanced GPU, memory, and I/O
+- Designs aligned with benchmark data
+
+Use Cases
+
+## Enterprise Use Cases
+
+CloudRift supports workloads with strict requirements around latency, throughput, and reliability.
+
+### Telecom and Network Services
+
+Inference workloads supporting customer interaction, network optimization, and real-time decision systems. These use cases prioritize predictable latency and high concurrency across distributed environments.
+
+### Large-Scale AI Applications
+
+Customer-facing AI systems such as chat interfaces, content generation, or search augmentation. These workloads demand throughput, reliability, and efficient scaling under peak traffic.
+
+### Banks and Financial Services
+
+Workloads for fraud detection, customer service automation, document processing, and risk analysis. These use cases demand high reliability, data security, and regulatory compliance with predictable performance.
+
+### Internal Enterprise AI Systems
+
+AI models used internally for automation, analytics, or support tooling, where reliability and data locality matter as much as performance.
+
+Why CloudRift
+
+## Why Datacenter Operators Choose CloudRift
+
+Infrastructure Ownership
+
+Everything runs on your hardware, in your datacenters. You control capacity, deployment models, and physical constraints.
+
+Customer & Pricing Control
+
+You set pricing, billing models, and customer relationships. CloudRift does not sit between you and your customers.
+
+Commercial Model
+
+Designed for operators who want to offer AI as a service, not enterprises looking to consume someone else's cloud.
+
+Operational Depth
+
+CloudRift is built by teams who manage datacenters at scale. We design inference systems with operational realities in mind, not just API performance.
+
+Hardware Flexibility
+
+We support multiple GPU generations and configurations and help select hardware based on real benchmarks, not fixed product tiers.
+
+Our Team
+
+## Years of Experience in Model Deployment & Optimization
+
+Our team has deep expertise in production inference workloads, from deployment to optimization at scale.
+
+![Animoji](https://www.cloudrift.ai/_next/image?url=%2Fanimoji.webp&w=3840&q=75)
+
+Animoji
+
+Real-time facial tracking
+
+![ARKit](https://www.cloudrift.ai/_next/image?url=%2FArKit.webp&w=3840&q=75)
+
+ARKit
+
+Spatial computing
+
+![Hand Tracking Vision Pro](https://www.cloudrift.ai/_next/image?url=%2FHand-tracking-vision-pro.webp&w=3840&q=75)
+
+Hand Tracking
+
+Vision Pro gestures
+
+![Portrait Mode in iOS](https://www.cloudrift.ai/_next/image?url=%2FPortrait%20Mode%20in%20iOS.webp&w=3840&q=75)
+
+Portrait Mode
+
+Depth sensing & bokeh
+
+![Roblox Face Tracking](https://www.cloudrift.ai/_next/image?url=%2Froblox%20face%20tracking.webp&w=3840&q=75)
+
+Roblox Face Tracking
+
+Live avatar animation
+
+![Room Plan Vision Pro](https://www.cloudrift.ai/_next/image?url=%2FRoom%20Plan%20(Vision%20Pro).webp&w=3840&q=75)
+
+Room Plan
+
+3D space scanning
+
+![AI Texture Generation](https://www.cloudrift.ai/_next/image?url=%2Fai-texture%20generation.webp&w=3840&q=75)
+
+AI Texture Generation
+
+Procedural asset creation
+
+![Hand Tracking Vision Pro](https://www.cloudrift.ai/_next/image?url=%2Fhand%20tracking-vision%20pro.webp&w=3840&q=75)
+
+Hand Tracking
+
+Gesture recognition
+
+Deploy in days
+
+## Ready to turn your datacenter into an AI factory?
+
+Talk to our team about deploying production inference on your infrastructure.
+
+[Book a Demo](https://calendly.com/d/cygt-b4b-5qp/cloudrift-demo-datacenter-partners) [Contact Us](https://www.cloudrift.ai/inference-for-datacenters#contact)
+
+FAQ
+
+## Common Questions About Inference
+
+What infrastructure is required to run inference with CloudRift?
+
+CloudRift runs on your existing GPU infrastructure in your datacenters. You need GPU-enabled servers (consumer or enterprise GPUs), standard networking, and the ability to install our software stack. We support a wide range of GPU models and configurations.
+
+How are performance guarantees and SLAs handled?
+
+Performance guarantees and SLAs are defined by you based on your infrastructure capabilities and customer requirements. CloudRift provides the tools and monitoring to help you meet your commitments, but you maintain control over SLAs and customer relationships.
+
+Can we offer inference under our own brand and pricing?
+
+Yes. CloudRift enables you to offer services under your own brand with full control over pricing, billing models, and customer relationships. We provide the platform and tools; you own the customer experience and commercial terms.
+
+How long does it take to get to production?
+
+Most deployments reach production within a few days to a few weeks, depending on your infrastructure setup and requirements. We help with benchmarking, deployment, configuration, and validation to get you operational quickly.
+
+Do you help recommend hardware for our workloads?
+
+Yes. We provide benchmark-driven hardware guidance based on real-world performance data. Our benchmarks help you select GPUs, configurations, and deployment strategies optimized for your specific inference workloads and performance targets.
+
+Do you provide advisory or consulting support beyond the platform?
+
+Yes. Beyond the platform, we offer advisory services including hardware selection guidance, deployment strategy, performance optimization, and operational best practices based on our experience running datacenters at scale.
+
+## Contact Us
+
+Let us know if you're looking to:
+
+- Find an affordable GPU provider
+- Sell your compute online
+- Manage on-prem infrastructure
+- Build a hybrid cloud solution
+- Optimize your AI deployment
+
+hello@cloudrift.ai
+
+CloudRift Inc., a Delaware corporation
+
+PO Box 1224, Santa Clara, CA 95052, USA
+
++1 (831) 534-3437
+
+[Follow us on X](https://x.com/CloudRiftAI)
+
+I'm interested in:
+
+Selling ComputeCustom BuildLong Term RentalDatacenter ManagementOther
+
+Organization
+
+Your name
+
+Your email
+
+Your message
+
+Subscribe to our newsletter for updates
+
+Submit

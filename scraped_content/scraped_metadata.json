@@ -1,0 +1,87 @@
+{
+    "cloudrift": {
+        "provider_name": "cloudrift",
+        "url": "https://cloudrift.ai",
+        "domain": "cloudrift.ai",
+        "scraped_at": "2026-03-18T14:28:16.941313",
+        "formats": [
+            "markdown",
+            "html"
+        ],
+        "success": "true",
+        "content_files": {
+            "markdown": "cloudrift_markdown.txt",
+            "html": "cloudrift_html.txt"
+        },
+        "title": "CloudRift \u2014 The Operating System for Sovereign AI Deployments",
+        "description": "Deploy, manage, and scale GPU infrastructure across your own data centers. Full virtualization, no vendor lock-in, enterprise-grade security."
+    },
+    "deepinfra": {
+        "provider_name": "deepinfra",
+        "url": "https://deepinfra.com",
+        "domain": "deepinfra.com",
+        "scraped_at": "2026-03-18T14:28:18.376125",
+        "formats": [
+            "markdown",
+            "html"
+        ],
+        "success": "true",
+        "content_files": {
+            "markdown": "deepinfra_markdown.txt",
+            "html": "deepinfra_html.txt"
+        },
+        "title": "Machine Learning Models and Infrastructure | Deep Infra",
+        "description": "Deep Infra offers cost-effective, scalable, easy-to-deploy, and production-ready machine-learning models and infrastructures for deep-learning models."
+    },
+    "fireworks": {
+        "provider_name": "fireworks",
+        "url": "https://fireworks.ai/pricing#serverless-pricing",
+        "domain": "fireworks.ai",
+        "scraped_at": "2026-03-18T14:25:12.013612",
+        "formats": [
+            "markdown",
+            "html"
+        ],
+        "success": "true",
+        "content_files": {
+            "markdown": "fireworks_markdown.txt",
+            "html": "fireworks_html.txt"
+        },
+        "title": "Fireworks - Pricing",
+        "description": "Choose the plan thats right for you."
+    },
+    "groq": {
+        "provider_name": "groq",
+        "url": "https://groq.com/pricing",
+        "domain": "groq.com",
+        "scraped_at": "2026-03-18T14:25:13.353577",
+        "formats": [
+            "markdown",
+            "html"
+        ],
+        "success": "true",
+        "content_files": {
+            "markdown": "groq_markdown.txt",
+            "html": "groq_html.txt"
+        },
+        "title": "Groq On-Demand Pricing for Tokens-as-a-Service | Groq is fast, low cost inference.",
+        "description": "Groq powers leading openly-available AI models. View the pricing of our core models including GPT-OSS, Kimi K2, Qwen3 32B, and more."
+    },
+    "cloudrift_inference": {
+        "provider_name": "cloudrift_inference",
+        "url": "https://www.cloudrift.ai/inference-for-datacenters",
+        "domain": "www.cloudrift.ai",
+        "scraped_at": "2026-03-18T14:28:33.234385",
+        "formats": [
+            "markdown",
+            "html"
+        ],
+        "success": "true",
+        "content_files": {
+            "markdown": "cloudrift_inference_markdown.txt",
+            "html": "cloudrift_inference_html.txt"
+        },
+        "title": "Inference for Datacenters \u2022 CloudRift",
+        "description": "Turn your datacenter into an AI factory for inference. CloudRift helps datacenter operators transform existing GPU infrastructure into an enterprise-ready AI inference platform, unlocking new revenue streams."
+    }
+}
