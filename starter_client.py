@@ -250,32 +250,44 @@ class DataExtractor:
             extraction_prompt = f"""
             Analyze this text and extract pricing information in JSON format:
             
-            Text: {llm_response}
+            Text: {llm_response[:8000]}
             
-            Extract pricing plans with this structure:
-            {{
-                "company_name": "company name",
-                "plans": [
-                    {{
-                        "plan_name": "plan name",
-                        "input_tokens": number or null,
-                        "output_tokens": number or null,
-                        "currency": "USD",
-                        "billing_period": "monthly/yearly/one-time",
-                        "features": ["feature1", "feature2"],
-                        "limitations": "any limitations mentioned",
-                        "query": "the user's query"
-                    }}
-                ]
-            }}
+            Extract ALL pricing plans from ALL companies mentioned and return a single JSON array:
+            [
+                {{
+                    "company_name": "company name",
+                    "plans": [
+                        {{
+                            "plan_name": "plan name",
+                            "input_tokens": number or null,
+                            "output_tokens": number or null,
+                            "currency": "USD",
+                            "billing_period": "monthly/yearly/one-time",
+                            "features": ["feature1", "feature2"],
+                            "limitations": "any limitations mentioned",
+                            "query": "the user's query"
+                        }}
+                    ]
+                }}
+            ]
             
-            Return only valid JSON, no other text. Do not return your response enclosed in ```json```
+            IMPORTANT: Return ONLY a single valid JSON array. No extra text, no markdown, no multiple objects.
             """
             
             extraction_response = await self._get_structured_extraction(extraction_prompt)
-            logger.info(f"Raw extraction response: {extraction_response[:500]}")
-            extraction_response = extraction_response.replace("```json\n", "").replace("```", "").strip()
-            pricing_data = json.loads(extraction_response)
+            extraction_response = extraction_response.replace("```json\n", "").replace("```json", "").replace("```", "").strip()
+
+            # Handle multiple JSON objects concatenated by taking only the first valid one
+            try:
+                pricing_data = json.loads(extraction_response)
+            except json.JSONDecodeError:
+                # Try to extract just the first complete JSON structure
+                import re
+                json_match = re.search(r'(\[.*?\]|\{.*?\})', extraction_response, re.DOTALL)
+                if json_match:
+                    pricing_data = json.loads(json_match.group(1))
+                else:
+                    raise
 
             # Normalizar: soportar {"plans": [...]}, {"pricing_plans": [...]}, y array en raíz [{"company_name":...}]
             entries = []
@@ -316,6 +328,7 @@ class DataExtractor:
                     total_stored += 1
 
             logger.info(f"Stored {total_stored} pricing plans")
+            print(f"\n[DB] ✓ Stored {total_stored} pricing plan(s) in SQLite database")
             
         except Exception as e:
             logging.error(f"Error extracting pricing data: {e}")
@@ -345,6 +358,7 @@ class ChatSession:
         if not self.sqlite_server:
             return None
         try:
+            print("\n[DB] Executing read_query on SQLite to check stored pricing data...")
             result = await self.sqlite_server.execute_tool("read_query", {
                 "query": "SELECT company_name, plan_name, input_tokens, output_tokens, currency, billing_period, features, limitations FROM pricing_plans ORDER BY created_at DESC"
             })
@@ -371,6 +385,7 @@ class ChatSession:
             )
             answer = response.content[0].text if response.content else None
             if answer and "don't have" not in answer.lower() and "not available" not in answer.lower() and "no data" not in answer.lower():
+                print(f"[DB] Found {len(rows)} stored records — answering from SQLite (no re-scraping)")
                 return answer
         except Exception as e:
             logger.debug(f"Database query failed: {e}")
@@ -378,12 +393,14 @@ class ChatSession:
 
     async def process_query(self, query: str) -> None:
         """Process a user query and extract/store relevant data."""
-        # Try to answer from the database first to avoid unnecessary scraping
-        db_answer = await self._query_from_database(query)
-        if db_answer:
-            logger.info("Answered from database, no scraping needed")
-            print(f"\n{db_answer}")
-            return
+        # Skip database lookup if this is a scraping command
+        is_scrape_command = query.strip().lower().startswith("scrape")
+        if not is_scrape_command:
+            db_answer = await self._query_from_database(query)
+            if db_answer:
+                logger.info("Answered from database, no scraping needed")
+                print(f"\n{db_answer}")
+                return
 
         messages = [{'role': 'user', 'content': query}]
         response = self.anthropic.messages.create(
@@ -396,6 +413,7 @@ class ChatSession:
         full_response = ""
         source_url = None
         used_web_search = False
+        successful = []
         
         process_query = True
         while process_query:
@@ -405,6 +423,7 @@ class ChatSession:
                     full_response += content.text + "\n"
                     assistant_content.append(content)
                     if len(response.content) == 1:
+                        print(f"\n{content.text}")
                         process_query = False
                 elif content.type == 'tool_use':
                     assistant_content.append(content)
@@ -422,7 +441,39 @@ class ChatSession:
                         process_query = False
                         break
 
+                    if tool_name == 'scrape_websites':
+                        websites = tool_args.get('websites', {})
+                        print(f"\nScraping {len(websites)} site(s):")
+                        for name, url in websites.items():
+                            print(f"  → {name}: {url}")
+
                     tool_result = await server.execute_tool(tool_name, tool_args)
+
+                    if tool_name == 'scrape_websites':
+                        # Each successful provider is a separate TextContent item
+                        successful = [c.text for c in tool_result.content if hasattr(c, 'text') and c.text]
+                        total = len(tool_args.get('websites', {}))
+                        print(f"\nSuccessfully scraped {len(successful)} out of {total} websites: {successful}")
+
+                        # Directly call extract_scraped_info for each provider and
+                        # accumulate the real pricing content into full_response
+                        scraper_server = next(
+                            (s for s in self.servers if self.tool_to_server.get('extract_scraped_info') == s.name),
+                            server
+                        )
+                        print("\n[Auto] Calling extract_scraped_info for each provider...")
+                        for provider in successful:
+                            try:
+                                extract_result = await scraper_server.execute_tool(
+                                    'extract_scraped_info', {'identifier': provider}
+                                )
+                                extract_text = extract_result.content[0].text if extract_result.content else ""
+                                full_response += f"\n--- {provider} ---\n{extract_text}\n"
+                                # Show only a brief confirmation, not full content
+                                chars = len(extract_text)
+                                print(f"  ✓ {provider}: extracted {chars} chars of content")
+                            except Exception as ex:
+                                logging.warning(f"Could not extract {provider}: {ex}")
 
                     if tool_name in ('scrape_websites', 'extract_scraped_info') and source_url is None:
                         result_text = str(tool_result)
@@ -451,6 +502,9 @@ class ChatSession:
                     if all(c.type == 'text' for c in response.content):
                         for c in response.content:
                             full_response += c.text + "\n"
+                        # Only print LLM text response, not raw scraped content
+                        if tool_name != 'scrape_websites':
+                            print(f"\n{response.content[0].text if response.content else ''}")
                         process_query = False
                     
                     assistant_content = []
@@ -497,6 +551,7 @@ class ChatSession:
             return
             
         try:
+            print("[DB] Executing read_query on SQLite (pricing_plans)...")
             pricing = await self.sqlite_server.execute_tool("read_query", {
                 "query": "SELECT company_name, plan_name, input_tokens, output_tokens, currency FROM pricing_plans ORDER BY created_at DESC LIMIT 5"
             })
@@ -537,8 +592,12 @@ class ChatSession:
                 for tool in tools:
                     self.tool_to_server[tool["name"]] = server.name
 
-            print(f"\nConnected to {len(self.servers)} server(s)")
+            print(f"\n{'='*60}")
+            print(f"Connected to {len(self.servers)} MCP server(s):")
+            for srv in self.servers:
+                print(f"  ✓ {srv.name}")
             print(f"Available tools: {[tool['name'] for tool in self.available_tools]}")
+            print(f"{'='*60}")
             
             if self.sqlite_server:
                 self.data_extractor = DataExtractor(self.sqlite_server, self.anthropic)
